@@ -13,6 +13,9 @@
           <td v-for="x in mapWidth" :key="x">
             <!-- {{ getIsland(x, y)?.name }} -->
             <template v-for="(island, i) in [getIsland(x - 1, y - 1)]">
+              <q-tooltip v-if="island?.image" :key="i">
+                {{ island?.name + '\n' + island?.tip }}
+              </q-tooltip>
               <img
                 :key="i"
                 v-if="island?.image"
@@ -41,6 +44,8 @@ interface IslandItem {
   image: string;
   width: number;
   height: number;
+  level: number;
+  tip: string;
 }
 
 const islandItems = ref<IslandItem[]>([]);
@@ -52,6 +57,8 @@ function addIsland(
   owner: string,
   width: number,
   height: number,
+  level: number,
+  tip: string,
 ): void {
   islandItems.value.push({
     name,
@@ -61,6 +68,8 @@ function addIsland(
     image: generateIslandImage(width, height),
     width,
     height,
+    level,
+    tip,
   });
 }
 
@@ -155,7 +164,16 @@ async function refreshTable() {
     convertedMapData.forEach((cell, index) => {
       const x = index % mw;
       const y = Math.floor(index / mw);
-      addIsland(`Island ${index + 1}`, x, y, cell.owner, 5, 5);
+      addIsland(
+        `Island ${index + 1}`,
+        x,
+        y,
+        cell.owner,
+        5,
+        5,
+        cell.level,
+        `${cell.energy}/${cell.capacity}(+${cell.rate})`,
+      );
     });
     console.log(islandItems.value, mw);
   } finally {
