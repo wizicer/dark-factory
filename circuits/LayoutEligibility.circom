@@ -101,7 +101,7 @@ template LayoutEligibility(MAP_WIDTH, MAP_HEIGHT, MAX_HOUSE, MAX_HOUSE_WIDTH, MA
   type3num <== typeAccumulation[3][MAP_SIZE - 1];
   type4num <== typeAccumulation[4][MAP_SIZE - 1];
 
-  signal out1 <== type1num * 1;
+  signal out1 <== type0num * 1;
   signal out2calc <-- out1 / 2;
   out1 === out2calc * 2;
   signal out2, t2;
