@@ -36,6 +36,7 @@
     "snarkjs": "^0.7.5",
     "typescript": "~5.5.3",
     "vite-plugin-checker": "^0.8.0",
+    "vue-connect-wallet": "^0.1.7",
     "vue-tsc": "^2.0.29"
   },
   "engines": {
