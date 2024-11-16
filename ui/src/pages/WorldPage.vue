@@ -45,18 +45,18 @@
     </table>
     <div class="q-ma-md"></div>
     <q-btn
-      v-if="selectedIsland && getIslandByIndex(selectedIsland)?.level == 0"
-      label="Claim"
-      color="positive"
-      @click="claim(selectedIsland)"
-    />
-    <q-btn
-      v-else-if="
+      v-if="
         selectedIsland && getIslandByIndex(selectedIsland)?.owner == account
       "
       label="Edit"
       color="info"
       @click="edit(selectedIsland)"
+    />
+    <q-btn
+      v-else-if="selectedIsland && getIslandByIndex(selectedIsland)?.level == 0"
+      label="Claim"
+      color="positive"
+      @click="claim(selectedIsland)"
     />
     <q-btn
       v-else-if="selectedIsland"
@@ -243,8 +243,33 @@ function getSizeByLevel(level: number) {
   }
 }
 
-function claim(index: number) {
-  console.log('claim', index);
+import { useQuasar } from 'quasar';
+
+const $q = useQuasar();
+
+async function claim(index: number) {
+  try {
+    await g.claimCell(index);
+    // Notify user of success
+    $q.notify({
+      type: 'positive',
+      message: 'Claim successful!',
+      position: 'top',
+    });
+    // Refresh the table to reflect the new state
+    await refreshTable();
+  } catch (error) {
+    // Notify user of error
+    let errorMessage = 'An unknown error occurred';
+    if (error instanceof Error) {
+      errorMessage = `Claim failed: ${error.message}`;
+    }
+    $q.notify({
+      type: 'negative',
+      message: errorMessage,
+      position: 'top',
+    });
+  }
 }
 
 function attack(index: number) {

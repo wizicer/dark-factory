@@ -36,12 +36,10 @@ contract Game is IGame {
     }
 
 
-    function claimCell(uint256 _index, uint256[2] memory a, uint256[2][2] memory b, uint256[2] memory c) public {
+    function claimCell(uint256 _index) public {
         require(map[_index].level == 0, "Cell is not level 0");
         require(map[_index].owner == address(0), "Cell already claimed");
         require(userClaimedCell[msg.sender] == 0, "Player already claimed a cell");
-
-        require(layoutEligibilityVerifier.verifyProof(a, b, c, [map[_index].rate, map[_index].capacity]), "Invalid proof");
 
         map[_index].owner = msg.sender;
         userClaimedCell[msg.sender] = _index + 1; // Store the index of the claimed cell
