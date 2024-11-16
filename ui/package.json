@@ -12,8 +12,7 @@
     "test": "echo \"No test specified\" && exit 0",
     "build:snarkjs": "cp ../node_modules/snarkjs/build/snarkjs.min.js public/",
     "dev": "quasar dev",
-    "build": "npm run build:snarkjs && quasar build",
-    "postinstall": "npm run build:snarkjs"
+    "build": "npm run build:snarkjs && quasar build"
   },
   "dependencies": {
     "@quasar/extras": "^1.16.4",
@@ -37,6 +36,7 @@
     "snarkjs": "^0.7.5",
     "typescript": "~5.5.3",
     "vite-plugin-checker": "^0.8.0",
+    "vue-connect-wallet": "^0.1.7",
     "vue-tsc": "^2.0.29"
   },
   "engines": {
