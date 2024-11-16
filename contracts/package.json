@@ -6,6 +6,7 @@
   "license": "MIT",
   "scripts": {
     "build:contracts": "forge build --extra-output-files abi && typechain --target ethers-v6 --out-dir ../ui/src/contracts ../out/**/*.abi.json",
+    "chain": "anvil --mnemonic-seed-unsafe 100",
     "deploy:contracts": "bash ./scripts/deploy.sh"
   },
   "devDependencies": {
