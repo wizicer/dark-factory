@@ -78,11 +78,8 @@ onMounted(() => {
   if (myCanvas.value) {
     let canvas: HTMLCanvasElement = myCanvas.value as HTMLCanvasElement;
     const route = useRoute();
-    const rows = Number((route.query.rows as string) || '0');
-    const cols = Number((route.query.cols as string) || '0');
-    // const rows = parseInt((route.query.rows as string) || '0', 18);
-    // const cols = parseInt((route.query.cols as string) || '0', 8);
-    // index.value = parseInt((route.query.index as string) || '-1', -1);
+    const rows = Number((route.query.rows as string) || '8');
+    const cols = Number((route.query.cols as string) || '18');
     index.value = Number((route.query.index as string) || '-1');
 
     par.value = mountCanvas(canvas, rows, cols);
