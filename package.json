@@ -9,9 +9,12 @@
     "lint": "eslint --ext .js,.ts,.vue ./",
     "format": "prettier --write \"**/*.{js,ts,vue,scss,html,md,json}\" --ignore-path .gitignore",
     "dev:ui": "cd ui && quasar dev",
-    "dev": "run-p dev:ui",
-    "build:ui": "cd ui && quasar build",
-    "build": "run-s build:ui"
+    "dev:contracts": "cd contracts && yarn chain",
+    "dev": "run-p dev:ui dev:contracts",
+    "build:circuits": "cd circuits && npm run build",
+    "build:contracts": "cd contracts && npm run build",
+    "build:ui": "cd ui && npm run build",
+    "build": "npm run build:circuits && npm run build:contracts && npm run build:ui"
   },
   "workspaces": [
     "circuits",
