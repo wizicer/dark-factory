@@ -14,6 +14,7 @@
     "build": "run-s build:ui"
   },
   "workspaces": [
+    "circuits",
     "contracts",
     "ui"
   ],

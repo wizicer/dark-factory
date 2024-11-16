@@ -36,3 +36,6 @@ contracts/LayoutEligibilityVerifier.sol
 out/
 cache/
 ui/src/contracts/
+ui/public/circuits/
+circuits/*_obj
+circuits/*.ptau
