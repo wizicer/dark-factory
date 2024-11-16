@@ -49,7 +49,7 @@ export default configure((/* ctx */) => {
       // publicPath: '/',
       // analyze: true,
       env: {
-        GAME_CONTRACT: '0x53Ab5e4eC3bfb7F246f93797F79d96d873067110',
+        GAME_CONTRACT: '0x03F80FeA1795627334C2c2ae7D623257398d0549',
       },
       // rawDefine: {}
       // ignorePublicFolder: true,
