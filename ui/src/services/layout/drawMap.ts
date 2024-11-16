@@ -18,6 +18,81 @@ export function redrawMap(par: MapParameters): void {
       }
     }
 
+    // draw border of map with outside sea and inner grass with direction using offset and sea images
+    for (let row = 0; row < par.fixedMapRows; row++) {
+      for (let col = 0; col < par.fixedMapColumns; col++) {
+        if (
+          row > par.offsetRows &&
+          row < par.mapRows - par.offsetRows - 1 &&
+          col > par.offsetColumns &&
+          col < par.mapColumns - par.offsetColumns - 1
+        )
+          continue;
+        const x = col * par.tileWidth;
+        const y = row * par.tileHeight;
+
+        let seaName = '';
+        if (row == par.offsetRows - 1 && col == par.offsetColumns - 1) {
+          seaName = 'lt';
+        } else if (
+          row == par.offsetRows + par.mapRows &&
+          col == par.mapColumns + par.offsetColumns
+        ) {
+          seaName = 'rb';
+        } else if (
+          row == par.offsetRows - 1 &&
+          col == par.mapColumns + par.offsetColumns
+        ) {
+          seaName = 'rt';
+        } else if (
+          row == par.offsetRows + par.mapRows &&
+          col == par.offsetColumns - 1
+        ) {
+          seaName = 'lb';
+        } else if (
+          col == par.offsetColumns - 1 &&
+          row > par.offsetRows - 1 &&
+          row < par.mapRows + par.offsetRows
+        ) {
+          seaName = 'lc';
+        } else if (
+          row == par.offsetRows - 1 &&
+          col > par.offsetColumns - 1 &&
+          col < par.mapColumns + par.offsetColumns
+        ) {
+          seaName = 'mt';
+        } else if (
+          col == par.mapColumns + par.offsetColumns &&
+          row > par.offsetRows - 1 &&
+          row < par.mapRows + par.offsetRows
+        ) {
+          seaName = 'rc';
+        } else if (
+          row == par.mapRows + par.offsetRows &&
+          col > par.offsetColumns - 1 &&
+          col < par.mapColumns + par.offsetColumns
+        ) {
+          seaName = 'mb';
+        } else {
+          seaName = par.seaPattern[row * par.fixedMapColumns + col];
+        }
+
+        if (!par.seaImages[seaName])
+          console.log('cannot find seaName', seaName);
+        par.context.drawImage(
+          par.seaImages[seaName].draw,
+          par.seaImages[seaName].xOffset * (par.baseSize + 1),
+          par.seaImages[seaName].yOffset * (par.baseSize + 1),
+          par.seaImages[seaName].tileWidth * par.baseSize,
+          par.seaImages[seaName].tileHeight * par.baseSize,
+          x,
+          y,
+          par.seaImages[seaName].tileWidth * par.baseSize,
+          par.seaImages[seaName].tileHeight * par.baseSize,
+        );
+      }
+    }
+
     // draw roads according to direction and position
     for (let row = 0; row < par.mapRows; row++) {
       for (let col = 0; col < par.mapColumns; col++) {
@@ -72,8 +147,8 @@ export function redrawMap(par: MapParameters): void {
           roadImage.yOffset * (par.baseSize + 1),
           roadImage.tileWidth * par.baseSize,
           roadImage.tileHeight * par.baseSize,
-          x,
-          y,
+          par.offsetColumns * par.baseSize + x,
+          par.offsetRows * par.baseSize + y,
           roadImage.tileWidth * par.baseSize,
           roadImage.tileHeight * par.baseSize,
         );
@@ -95,8 +170,8 @@ export function redrawMap(par: MapParameters): void {
             t.yOffset * (par.baseSize + 1),
             t.tileWidth * par.baseSize,
             t.tileHeight * par.baseSize,
-            x,
-            y,
+            par.offsetColumns * par.baseSize + x,
+            par.offsetRows * par.baseSize + y,
             t.tileWidth * par.baseSize,
             t.tileHeight * par.baseSize,
           );

@@ -17,6 +17,10 @@ export interface MapParameters {
   tileHeight: number;
   mapRows: number;
   mapColumns: number;
+  offsetRows: number;
+  offsetColumns: number;
+  fixedMapColumns: number;
+  fixedMapRows: number;
   mapHeight: number;
   mapWidth: number;
   sourceTile: number;
@@ -25,7 +29,9 @@ export interface MapParameters {
   context: CanvasRenderingContext2D | null;
   placements: ImageOffset[];
   roadImages: Record<string, ImageOffset>;
+  seaImages: Record<string, ImageOffset>;
   mapPattern: Record<number, string>;
+  seaPattern: Record<number, string>;
 }
 
 export const getMapParameters = (
@@ -34,21 +40,31 @@ export const getMapParameters = (
   mapColumns = 18,
 ): MapParameters => {
   const baseSize = 21;
+  const fixedMapColumns = 25;
+  const fixedMapRows = 16;
+  const offsetColumns = Math.floor((fixedMapColumns - mapColumns) / 2);
+  const offsetRows = Math.floor((fixedMapRows - mapRows) / 2);
   return {
     baseSize,
     tileWidth: baseSize,
     tileHeight: baseSize,
     mapRows,
     mapColumns,
-    mapHeight: mapRows * baseSize,
-    mapWidth: mapColumns * baseSize,
+    mapHeight: fixedMapRows * baseSize,
+    mapWidth: fixedMapColumns * baseSize,
+    fixedMapRows,
+    fixedMapColumns,
+    offsetColumns,
+    offsetRows,
     tiles: new Array(mapRows * mapColumns).fill(null),
     sourceTile: 0,
     mouseState: 'Normal',
     context,
     placements: getPlacements(),
     roadImages: getRoadImages(),
+    seaImages: getSeaImages(),
     mapPattern: generateMapPattern(mapColumns, mapRows),
+    seaPattern: generateSeaPattern(fixedMapColumns, fixedMapRows),
   };
 };
 
@@ -147,4 +163,67 @@ export function generateMapPattern(
     mapPattern[i] = randomGrassType;
   }
   return mapPattern;
+}
+
+export function generateSeaPattern(
+  columns: number,
+  rows: number,
+): Record<number, string> {
+  const seaPattern: Record<number, string> = {};
+  const seaOptions = [
+    { name: 'sea', chance: 0.75 },
+    { name: 'float1', chance: 0.14 },
+    { name: 'float2', chance: 0.05 },
+    { name: 'float3', chance: 0.04 },
+    { name: 'float4', chance: 0.01 },
+    { name: 'float5', chance: 0.01 },
+  ];
+  for (let i = 0; i < columns * rows; i++) {
+    const randomValue = Math.random();
+    let cumulativeChance = 0;
+    for (const option of seaOptions) {
+      cumulativeChance += option.chance;
+      if (randomValue < cumulativeChance) {
+        seaPattern[i] = option.name;
+        break;
+      }
+    }
+  }
+  return seaPattern;
+}
+
+export const seaImageRaw: [string, number, number][] = [
+  ['lt', 0, 7],
+  ['mt', 1, 7],
+  ['rt', 2, 7],
+  ['lb', 3, 7],
+  ['mb', 4, 7],
+  ['rb', 5, 7],
+  ['lc', 0, 8],
+  ['rc', 1, 8],
+  ['sea', 2, 8],
+  ['float1', 0, 9],
+  ['float2', 1, 9],
+  ['float3', 2, 9],
+  ['float4', 3, 9],
+  ['float5', 4, 9],
+];
+
+export function getSeaImages(): Record<string, ImageOffset> {
+  const draw = new Image();
+  draw.src = TerrainImage;
+  const seaImages: Record<string, ImageOffset> = {};
+  for (let i = 0; i < seaImageRaw.length; i++) {
+    const [name, xOffset, yOffset] = seaImageRaw[i];
+    seaImages[name] = {
+      image: TerrainImage,
+      draw,
+      tileWidth: 1,
+      tileHeight: 1,
+      xOffset,
+      yOffset,
+      name,
+    };
+  }
+  return seaImages;
 }

@@ -80,16 +80,14 @@ function doMouseClick(e: MouseEvent, par: MapParameters): void {
   setTile(e, par);
 }
 
-function setTile(
-  e: MouseEvent,
-
-  par: MapParameters,
-): void {
+function setTile(e: MouseEvent, par: MapParameters): void {
   const x: number = e.offsetX;
   const y: number = e.offsetY;
   if (y < par.mapHeight && x < par.mapWidth) {
-    const tileX: number = Math.floor(x / par.tileWidth);
-    const tileY: number = Math.floor(y / par.tileHeight);
+    const tileX: number = Math.floor(x / par.tileWidth) - par.offsetColumns;
+    const tileY: number = Math.floor(y / par.tileHeight) - par.offsetRows;
+    if (tileX < 0 || tileY < 0) return;
+    if (tileX >= par.mapColumns || tileY >= par.mapRows) return;
     const targetTile: number = tileY * par.mapColumns + tileX;
     if (par.mouseState == 'RightDown') {
       par.tiles[targetTile] = null;

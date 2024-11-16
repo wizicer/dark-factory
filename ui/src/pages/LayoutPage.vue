@@ -76,6 +76,9 @@ onMounted(() => {
     let canvas: HTMLCanvasElement = myCanvas.value as HTMLCanvasElement;
 
     par.value = mountCanvas(canvas);
+    setTimeout(() => {
+      if (par.value) redrawMap(par.value);
+    }, 200);
   }
 });
 
