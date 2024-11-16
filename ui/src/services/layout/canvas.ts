@@ -1,9 +1,13 @@
 import { getMapParameters, MapParameters } from './definitions';
 import { redrawMap } from './drawMap';
 
-export function mountCanvas(canvas: HTMLCanvasElement): MapParameters {
+export function mountCanvas(
+  canvas: HTMLCanvasElement,
+  mapRows = 8,
+  mapColumns = 18,
+): MapParameters {
   const context = canvas.getContext('2d') as CanvasRenderingContext2D;
-  const par = getMapParameters(context);
+  const par = getMapParameters(context, mapRows, mapColumns);
 
   canvas.addEventListener('mousedown', (e) => doMouseDown(e, par));
   document.addEventListener('contextmenu', (event: Event) =>

@@ -67,15 +67,25 @@ import { mountCanvas } from 'src/services/layout/canvas';
 import { redrawMap } from 'src/services/layout/drawMap';
 import { generateWitnessRaw } from 'src/services/proof/witness';
 import { getLayoutProof } from 'src/services/proof/gameProof';
+import { useRoute } from 'vue-router';
 
 const myCanvas = useTemplateRef('myCanvas');
 
+const index = ref(-1);
 let par: Ref<MapParameters | null> = ref(null);
+
 onMounted(() => {
   if (myCanvas.value) {
     let canvas: HTMLCanvasElement = myCanvas.value as HTMLCanvasElement;
+    const route = useRoute();
+    const rows = Number((route.query.rows as string) || '0');
+    const cols = Number((route.query.cols as string) || '0');
+    // const rows = parseInt((route.query.rows as string) || '0', 18);
+    // const cols = parseInt((route.query.cols as string) || '0', 8);
+    // index.value = parseInt((route.query.index as string) || '-1', -1);
+    index.value = Number((route.query.index as string) || '-1');
 
-    par.value = mountCanvas(canvas);
+    par.value = mountCanvas(canvas, rows, cols);
     setTimeout(() => {
       if (par.value) redrawMap(par.value);
     }, 200);

@@ -72,6 +72,9 @@ import { ethers, JsonRpcSigner } from 'ethers';
 import { GameAbi__factory } from 'src/contracts';
 import { generateIslandImage } from 'src/services/world/generation';
 import { onMounted, ref } from 'vue';
+import { useRouter } from 'vue-router';
+
+const router = useRouter();
 
 interface IslandItem {
   name: string;
@@ -229,7 +232,7 @@ async function refreshTable() {
 
 function getSizeByLevel(level: number) {
   if (level == 0) {
-    return [5, 5];
+    return [8, 8];
   } else if (level == 1) {
     return [10, 8];
   } else if (level == 2) {
@@ -278,6 +281,12 @@ function attack(index: number) {
 
 function edit(index: number) {
   console.log('claim', index);
+  const island = getIslandByIndex(index);
+  if (island) {
+    const rows = island.height;
+    const cols = island.width;
+    router.push({ path: '/layout', query: { rows, cols, index } });
+  }
 }
 </script>
 
