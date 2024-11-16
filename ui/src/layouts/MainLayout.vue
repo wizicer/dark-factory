@@ -3,6 +3,7 @@
     <q-header elevated>
       <q-toolbar>
         <q-btn
+          v-if="!$q.screen.lt.md"
           flat
           dense
           round
@@ -11,96 +12,80 @@
           @click="toggleLeftDrawer"
         />
 
-        <q-toolbar-title>
-          Quasar App
-        </q-toolbar-title>
-
-        <div>Quasar v{{ $q.version }}</div>
+        <q-toolbar-title>Dark Factory</q-toolbar-title>
+        <div>
+          <q-btn flat dense round icon="email" />
+          <q-btn flat dense round icon="settings" />
+        </div>
       </q-toolbar>
     </q-header>
 
-    <q-drawer
-      v-model="leftDrawerOpen"
-      show-if-above
-      bordered
-    >
+    <q-drawer v-model="leftDrawerOpen" show-if-above bordered>
       <q-list>
-        <q-item-label
-          header
-        >
-          Essential Links
-        </q-item-label>
+        <q-item-label header>Navigation</q-item-label>
 
-        <EssentialLink
+        <q-item
           v-for="link in linksList"
           :key="link.title"
-          v-bind="link"
-        />
+          clickable
+          v-ripple
+          :to="link.link"
+        >
+          <q-item-section avatar>
+            <q-icon :name="link.icon" />
+          </q-item-section>
+          <q-item-section>
+            <q-item-label>{{ link.title }}</q-item-label>
+          </q-item-section>
+        </q-item>
       </q-list>
     </q-drawer>
 
     <q-page-container>
       <router-view />
     </q-page-container>
+
+    <!-- Bottom Navigation Bar -->
+    <q-footer class="q-pa-sm bg-grey-3" v-if="$q.screen.lt.md">
+      <q-tabs v-model="tab" dense class="bg-grey-3 text-grey-7" align="justify">
+        <q-route-tab
+          v-for="link in linksList"
+          :key="link.title"
+          :to="link.link"
+          :icon="link.icon"
+          :label="link.title"
+        />
+      </q-tabs>
+    </q-footer>
   </q-layout>
 </template>
 
 <script setup lang="ts">
 import { ref } from 'vue';
-import EssentialLink, { EssentialLinkProps } from 'components/EssentialLink.vue';
+import { EssentialLinkProps } from 'components/EssentialLink.vue';
+
+const tab = ref('home');
 
 defineOptions({
-  name: 'MainLayout'
+  name: 'MainLayout',
 });
 
 const linksList: EssentialLinkProps[] = [
   {
-    title: 'Docs',
-    caption: 'quasar.dev',
-    icon: 'school',
-    link: 'https://quasar.dev'
+    title: 'World',
+    icon: 'travel_explore',
+    link: '/world',
   },
   {
-    title: 'Github',
-    caption: 'github.com/quasarframework',
-    icon: 'code',
-    link: 'https://github.com/quasarframework'
+    title: 'Layout',
+    icon: 'app_registration',
+    link: '/layout',
   },
-  {
-    title: 'Discord Chat Channel',
-    caption: 'chat.quasar.dev',
-    icon: 'chat',
-    link: 'https://chat.quasar.dev'
-  },
-  {
-    title: 'Forum',
-    caption: 'forum.quasar.dev',
-    icon: 'record_voice_over',
-    link: 'https://forum.quasar.dev'
-  },
-  {
-    title: 'Twitter',
-    caption: '@quasarframework',
-    icon: 'rss_feed',
-    link: 'https://twitter.quasar.dev'
-  },
-  {
-    title: 'Facebook',
-    caption: '@QuasarFramework',
-    icon: 'public',
-    link: 'https://facebook.quasar.dev'
-  },
-  {
-    title: 'Quasar Awesome',
-    caption: 'Community Quasar projects',
-    icon: 'favorite',
-    link: 'https://awesome.quasar.dev'
-  }
 ];
 
 const leftDrawerOpen = ref(false);
 
-function toggleLeftDrawer () {
+function toggleLeftDrawer() {
   leftDrawerOpen.value = !leftDrawerOpen.value;
 }
 </script>
