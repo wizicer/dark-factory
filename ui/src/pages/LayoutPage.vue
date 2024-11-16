@@ -168,16 +168,4 @@ async function prove() {
 }
 </script>
 
-<style lang="scss" scoped>
-.container {
-  width: 614px;
-  height: 410px;
-  background-image: url('../assets/background.png');
-  background-size: 614px 410px;
-
-  canvas {
-    margin-left: 109px;
-    margin-top: 113px;
-  }
-}
-</style>
+<style lang="scss" scoped></style>
