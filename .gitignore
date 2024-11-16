@@ -31,3 +31,8 @@ yarn-error.log*
 
 # local .env files
 .env.local*
+
+contracts/LayoutEligibilityVerifier.sol
+out/
+cache/
+ui/src/contracts/
