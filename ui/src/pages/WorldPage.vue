@@ -10,23 +10,60 @@
       <tbody>
         <tr v-for="y in mapHeight" :key="y">
           <td>{{ y }}</td>
-          <td v-for="x in mapWidth" :key="x">
-            <!-- {{ getIsland(x, y)?.name }} -->
-            <template v-for="(island, i) in [getIsland(x - 1, y - 1)]">
-              <q-tooltip v-if="island?.image" :key="i">
-                {{ island?.name + '\n' + island?.tip }}
-              </q-tooltip>
-              <img
-                :key="i"
-                v-if="island?.image"
-                :src="island?.image"
-                :alt="island?.name"
-              />
+          <template v-for="x in mapWidth" :key="x">
+            <template v-for="(island, i) in [getIsland(x - 1, y - 1)]" :key="i">
+              <td
+                :class="{
+                  'selected-island':
+                    selectedIsland == (y - 1) * mapWidth + x - 1,
+                  own: island?.owner == account,
+                }"
+                @click="selectedIsland = (y - 1) * mapWidth + x - 1"
+              >
+                <!-- {{ getIsland(x, y)?.name }} -->
+                <q-tooltip v-if="island?.image">
+                  {{
+                    island?.name +
+                    '[' +
+                    island?.level +
+                    ']' +
+                    '\n' +
+                    island?.tip
+                  }}
+                </q-tooltip>
+                <img
+                  :key="i"
+                  v-if="island?.image"
+                  :src="island?.image"
+                  :alt="island?.name"
+                />
+              </td>
             </template>
-          </td>
+          </template>
         </tr>
       </tbody>
     </table>
+    <div class="q-ma-md"></div>
+    <q-btn
+      v-if="selectedIsland && getIslandByIndex(selectedIsland)?.level == 0"
+      label="Claim"
+      color="positive"
+      @click="claim(selectedIsland)"
+    />
+    <q-btn
+      v-else-if="
+        selectedIsland && getIslandByIndex(selectedIsland)?.owner == account
+      "
+      label="Edit"
+      color="info"
+      @click="edit(selectedIsland)"
+    />
+    <q-btn
+      v-else-if="selectedIsland"
+      label="Attack"
+      color="negative"
+      @click="attack(selectedIsland)"
+    />
   </q-page>
 </template>
 
@@ -49,6 +86,7 @@ interface IslandItem {
 }
 
 const islandItems = ref<IslandItem[]>([]);
+const selectedIsland = ref<number | null>(null);
 
 function addIsland(
   name: string,
@@ -80,6 +118,13 @@ const getIsland = (x: number, y: number): IslandItem | null => {
   const island = islandItems.value.find((item) => item.x === x && item.y === y);
   return island ? island : null;
 };
+
+function getIslandByIndex(index: number): IslandItem | null {
+  const x = index % mapWidth.value;
+  const y = Math.floor(index / mapWidth.value);
+  const island = islandItems.value.find((item) => item.x === x && item.y === y);
+  return island ? island : null;
+}
 
 const account = ref('');
 
@@ -164,13 +209,14 @@ async function refreshTable() {
     convertedMapData.forEach((cell, index) => {
       const x = index % mw;
       const y = Math.floor(index / mw);
+      const [w, h] = getSizeByLevel(cell.level);
       addIsland(
         `Island ${index + 1}`,
         x,
         y,
         cell.owner,
-        5,
-        5,
+        w,
+        h,
         cell.level,
         `${cell.energy}/${cell.capacity}(+${cell.rate})`,
       );
@@ -179,6 +225,34 @@ async function refreshTable() {
   } finally {
     isListRefreshing.value = false;
   }
+}
+
+function getSizeByLevel(level: number) {
+  if (level == 0) {
+    return [5, 5];
+  } else if (level == 1) {
+    return [10, 8];
+  } else if (level == 2) {
+    return [15, 8];
+  } else if (level == 3) {
+    return [18, 8];
+  } else if (level == 4) {
+    return [20, 10];
+  } else {
+    throw new Error('Invalid level');
+  }
+}
+
+function claim(index: number) {
+  console.log('claim', index);
+}
+
+function attack(index: number) {
+  console.log('claim', index);
+}
+
+function edit(index: number) {
+  console.log('claim', index);
 }
 </script>
 
@@ -202,6 +276,14 @@ async function refreshTable() {
   th:first-child,
   td:first-child {
     font-weight: bold;
+  }
+
+  .selected-island {
+    background-color: #f0f0f0;
+  }
+
+  .own {
+    background-color: #fee0e0;
   }
 }
 </style>
