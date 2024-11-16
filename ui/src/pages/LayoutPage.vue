@@ -66,6 +66,7 @@ import { MapParameters } from 'src/services/layout/definitions';
 import { mountCanvas } from 'src/services/layout/canvas';
 import { redrawMap } from 'src/services/layout/drawMap';
 import { generateWitnessRaw } from 'src/services/proof/witness';
+import { getLayoutProof } from 'src/services/proof/gameProof';
 
 const myCanvas = useTemplateRef('myCanvas');
 
@@ -145,8 +146,10 @@ async function prove() {
 
   try {
     proof.value = 'todo';
-    // proof.value = await getLayoutProof(witnessValues.value);
-    // proofString.value = JSON.stringify(proof.value, null, 4);
+    proof.value = await getLayoutProof(
+      witnessValues.value.map((num) => BigInt(num)),
+    );
+    proofString.value = JSON.stringify(proof.value, null, 4);
     $q.notify({
       type: 'positive',
       message: 'Proof generated successfully!',

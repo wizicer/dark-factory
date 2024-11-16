@@ -64,6 +64,18 @@
 import { ref } from 'vue';
 import { EssentialLinkProps } from 'components/EssentialLink.vue';
 
+import { useMeta } from 'quasar';
+
+useMeta({
+  // JS tags
+  script: {
+    snarkjs: {
+      // type: 'application/javascript',
+      src: '/snarkjs.min.js',
+    },
+  },
+});
+
 const tab = ref('home');
 
 defineOptions({

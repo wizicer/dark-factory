@@ -37,6 +37,7 @@ out/
 cache/
 ui/src/contracts/
 ui/public/circuits/
+ui/public/snarkjs.min.js
 circuits/*_obj
 circuits/*.ptau
 
