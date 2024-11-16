@@ -68,6 +68,7 @@ import { redrawMap } from 'src/services/layout/drawMap';
 import { generateWitnessRaw } from 'src/services/proof/witness';
 import { getLayoutProof } from 'src/services/proof/gameProof';
 import { useRoute } from 'vue-router';
+import { getPath } from 'src/services/proof/path';
 
 const myCanvas = useTemplateRef('myCanvas');
 
@@ -135,6 +136,7 @@ function load() {
 }
 
 const witnessValues: Ref<number[]> = ref([]);
+const pathValues: Ref<number[]> = ref([]);
 function generate() {
   if (!par.value) return;
   const { steps, rate, witness } = generateWitnessRaw(par.value);
@@ -145,6 +147,9 @@ function generate() {
   );
 
   witnessValues.value = witness;
+
+  pathValues.value = getPath(witnessValues.value, par.value.mapColumns);
+  console.log('path:', pathValues.value);
 }
 
 const proof = ref({});
