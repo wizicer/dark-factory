@@ -1,8 +1,8 @@
 export function generateIslandImage(
   width: number,
   height: number,
-  max_width = 20,
-  max_height = 20,
+  max_width = 30,
+  max_height = 30,
 ): string {
   const canvas = document.createElement('canvas');
   canvas.width = max_width;
