@@ -57,10 +57,11 @@ Building **Dark Factory** involved addressing multiple complex challenges:
 
 ## Deployment Details
 
-- Scroll Sepolia: 0x03F80FeA1795627334C2c2ae7D623257398d0549
-- Polygon zkEVM Cardona: 0x03F80FeA1795627334C2c2ae7D623257398d0549
-- Linea: 0x03F80FeA1795627334C2c2ae7D623257398d0549
-- World: 0x03F80FeA1795627334C2c2ae7D623257398d0549
+- Scroll Sepolia: [0x03F80FeA1795627334C2c2ae7D623257398d0549](https://sepolia.scrollscan.com/address/0x03F80FeA1795627334C2c2ae7D623257398d0549)
+- Polygon zkEVM Cardona: [0x03F80FeA1795627334C2c2ae7D623257398d0549](https://cardona-zkevm.polygonscan.com/address/0x03F80FeA1795627334C2c2ae7D623257398d0549)
+- Linea Sepolia: [0x03F80FeA1795627334C2c2ae7D623257398d0549](https://sepolia.lineascan.build/address/0x03F80FeA1795627334C2c2ae7D623257398d0549)
+- World: [0x03F80FeA1795627334C2c2ae7D623257398d0549](https://sepolia.worldscan.org/address/0x03F80FeA1795627334C2c2ae7D623257398d0549)
+- Blockscout Scroll Sepolia: [0x03F80FeA1795627334C2c2ae7D623257398d0549](https://scroll-sepolia.blockscout.com/address/0x03F80FeA1795627334C2c2ae7D623257398d0549)
 
 ## 🎮 Gameplay Highlights
 
