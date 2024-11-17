@@ -58,6 +58,9 @@ Building **Dark Factory** involved addressing multiple complex challenges:
 ## Deployment Details
 
 - Scroll Sepolia: 0x03F80FeA1795627334C2c2ae7D623257398d0549
+- Polygon zkEVM Cardona: 0x03F80FeA1795627334C2c2ae7D623257398d0549
+- Linea: 0x03F80FeA1795627334C2c2ae7D623257398d0549
+- World: 0x03F80FeA1795627334C2c2ae7D623257398d0549
 
 ## 🎮 Gameplay Highlights
 
