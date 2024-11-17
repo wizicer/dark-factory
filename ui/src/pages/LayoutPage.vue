@@ -66,11 +66,62 @@ import { MapParameters } from 'src/services/layout/definitions';
 import { mountCanvas } from 'src/services/layout/canvas';
 import { redrawMap } from 'src/services/layout/drawMap';
 import { generateWitnessRaw } from 'src/services/proof/witness';
-import { getLayoutProof } from 'src/services/proof/gameProof';
+import { getLayoutProof, LayoutProof } from 'src/services/proof/gameProof';
 import { useRoute } from 'vue-router';
 import { getPath } from 'src/services/proof/path';
+import { GameAbi__factory } from 'src/contracts';
+import { ethers, JsonRpcSigner } from 'ethers';
 
 const myCanvas = useTemplateRef('myCanvas');
+
+//========
+const account = ref('');
+
+let signer: JsonRpcSigner | null = null;
+
+let provider;
+let chainId;
+
+if (window.ethereum == null) {
+  // // If MetaMask is not installed, we use the default provider,
+  // // which is backed by a variety of third-party services (such
+  // // as INFURA). They do not have private keys installed so are
+  // // only have read-only access
+  // console.log('MetaMask not installed; using read-only defaults');
+  // // provider = ethers.getDefaultProvider();
+  // provider = (ethers as any).getDefaultProvider();
+  console.log('metamask not found');
+} else {
+  // Connect to the MetaMask EIP-1193 object. This is a standard
+  // protocol that allows Ethers access to make all read-only
+  // requests through MetaMask.
+  provider = new ethers.BrowserProvider(window.ethereum);
+  // provider = new ethers.BrowserProvider(window.ethereum, 31337);
+  chainId = (await provider.getNetwork()).chainId;
+  // const RPC_HOST = 'https://moonbase-alpha.public.blastapi.io/';
+  // provider = new ethers.JsonRpcProvider(RPC_HOST);
+  // provider = new Web3Provider(window.ethereum);
+
+  // It also provides an opportunity to request access to write
+  // operations, which will be performed by the private key
+  // that MetaMask manages for the user.
+  signer = await provider.getSigner();
+  // console.log('get signer', provider, signer);
+
+  // let accounts = await provider.send("eth_requestAccounts", []);
+  // account.value = accounts[0];
+  account.value = await signer.getAddress();
+}
+
+const contract =
+  chainId == 31337n
+    ? (process.env.GAME_CONTRACT ?? '')
+    : chainId == 544351n // Scroll Sepolia
+      ? ''
+      : '';
+
+const g = GameAbi__factory.connect(contract, signer);
+//========
 
 const index = ref(-1);
 let par: Ref<MapParameters | null> = ref(null);
@@ -165,6 +216,27 @@ async function prove() {
       pathValues.value.map((num) => BigInt(num)),
     );
     proofString.value = JSON.stringify(proof.value, null, 4);
+
+    try {
+      const p = proof.value as LayoutProof;
+      await g.setCellProperties(index.value, p.rate, p.storage, p.a, p.b, p.c);
+      $q.notify({
+        type: 'positive',
+        message: 'Update successful!',
+        position: 'top',
+      });
+    } catch (error) {
+      let errorMessage = 'An unknown error occurred';
+      if (error instanceof Error) {
+        errorMessage = `update failed: ${error.message}`;
+      }
+      $q.notify({
+        type: 'negative',
+        message: errorMessage,
+        position: 'top',
+      });
+    }
+
     $q.notify({
       type: 'positive',
       message: 'Proof generated successfully!',
