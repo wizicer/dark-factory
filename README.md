@@ -55,7 +55,9 @@ Building **Dark Factory** involved addressing multiple complex challenges:
    - Typechain automates the connection between smart contracts and the front-end.
    - Ethers.js handles seamless blockchain interactions.
 
----
+## Deployment Details
+
+- Scroll Sepolia: 0x03F80FeA1795627334C2c2ae7D623257398d0549
 
 ## 🎮 Gameplay Highlights
 
