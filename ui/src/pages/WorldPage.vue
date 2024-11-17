@@ -1,5 +1,12 @@
 <template>
   <q-page class="q-ma-md">
+    Explore the world onchain via
+    <a
+      :href="'https://scroll-sepolia.blockscout.com/address/' + contract"
+      target="_blank"
+    >
+      Blockscout
+    </a>
     <table class="island-table" v-if="mapWidth && mapHeight">
       <thead>
         <tr>
