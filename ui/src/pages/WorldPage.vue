@@ -134,6 +134,8 @@ const account = ref('');
 let signer: JsonRpcSigner | null = null;
 
 let provider;
+let chainId;
+
 if (window.ethereum == null) {
   // // If MetaMask is not installed, we use the default provider,
   // // which is backed by a variety of third-party services (such
@@ -147,7 +149,9 @@ if (window.ethereum == null) {
   // Connect to the MetaMask EIP-1193 object. This is a standard
   // protocol that allows Ethers access to make all read-only
   // requests through MetaMask.
-  provider = new ethers.BrowserProvider(window.ethereum, 31337);
+  provider = new ethers.BrowserProvider(window.ethereum);
+  // provider = new ethers.BrowserProvider(window.ethereum, 31337);
+  chainId = (await provider.getNetwork()).chainId;
   // const RPC_HOST = 'https://moonbase-alpha.public.blastapi.io/';
   // provider = new ethers.JsonRpcProvider(RPC_HOST);
   // provider = new Web3Provider(window.ethereum);
@@ -163,7 +167,14 @@ if (window.ethereum == null) {
   account.value = await signer.getAddress();
 }
 
-const g = GameAbi__factory.connect(process.env.GAME_CONTRACT ?? '', signer);
+const contract =
+  chainId == 31337n
+    ? (process.env.GAME_CONTRACT ?? '')
+    : chainId == 544351n // Scroll Sepolia
+      ? ''
+      : '';
+
+const g = GameAbi__factory.connect(contract, signer);
 
 // const gameList: Ref<GameState[]> = ref([]);
 const isListRefreshing = ref(false);
@@ -232,15 +243,15 @@ async function refreshTable() {
 
 function getSizeByLevel(level: number) {
   if (level == 0) {
-    return [8, 8];
-  } else if (level == 1) {
-    return [10, 8];
-  } else if (level == 2) {
-    return [15, 8];
-  } else if (level == 3) {
     return [18, 8];
+  } else if (level == 1) {
+    return [20, 8];
+  } else if (level == 2) {
+    return [20, 12];
+  } else if (level == 3) {
+    return [20, 18];
   } else if (level == 4) {
-    return [20, 10];
+    return [24, 24];
   } else {
     throw new Error('Invalid level');
   }
