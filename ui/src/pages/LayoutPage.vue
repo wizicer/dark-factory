@@ -149,7 +149,6 @@ function generate() {
   witnessValues.value = witness;
 
   pathValues.value = getPath(witnessValues.value, par.value.mapColumns);
-  console.log('path:', pathValues.value);
 }
 
 const proof = ref({});
@@ -163,6 +162,7 @@ async function prove() {
     proof.value = 'todo';
     proof.value = await getLayoutProof(
       witnessValues.value.map((num) => BigInt(num)),
+      pathValues.value.map((num) => BigInt(num)),
     );
     proofString.value = JSON.stringify(proof.value, null, 4);
     $q.notify({
