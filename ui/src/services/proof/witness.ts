@@ -118,9 +118,9 @@ export function generateWitnessRaw(par: MapParameters): {
   // 2: 2 - 1
   // 3: 1 - 1
 
-  const out1 = machineTypeCount[1] * 1;
-  const out2 = Math.min(out1 / 2, machineTypeCount[2]);
-  const out3 = Math.min(out2, machineTypeCount[3]);
+  const out1 = machineTypeCount[1];
+  const out2 = Math.min(out1, machineTypeCount[2] * 2);
+  const out3 = Math.min(out2, machineTypeCount[3] * 2);
 
   const rate = out3;
 
