@@ -149,7 +149,9 @@ if (window.ethereum == null) {
   // Connect to the MetaMask EIP-1193 object. This is a standard
   // protocol that allows Ethers access to make all read-only
   // requests through MetaMask.
-  provider = new ethers.BrowserProvider(window.ethereum);
+  provider = new ethers.BrowserProvider(window.ethereum, undefined, {
+    cacheTimeout: -1,
+  });
   // provider = new ethers.BrowserProvider(window.ethereum, 31337);
   chainId = (await provider.getNetwork()).chainId;
   // const RPC_HOST = 'https://moonbase-alpha.public.blastapi.io/';
