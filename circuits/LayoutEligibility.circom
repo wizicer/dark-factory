@@ -190,15 +190,20 @@ template LayoutEligibility(MAP_WIDTH, MAP_HEIGHT, MAX_HOUSE, MAX_HOUSE_WIDTH, MA
   type3num <== typeAccumulation[3][MAP_SIZE - 1];
   type4num <== typeAccumulation[4][MAP_SIZE - 1];
 
-  signal out1 <== type1num * 1;
-  signal out2calc <-- out1 / 2;
-  out1 === out2calc * 2;
+  signal out1 <== type0num;
+  signal out2calc <-- out1;
+  signal type1calc <== type1num;
+  signal compare2 <-- type1calc * 2;
+  type1calc * 2 === compare2;
   signal out2, t2;
-  (out2, t2) <== Switcher()(LessThan(5)([out2calc, type1num]), out2calc, type1num);
+  (out2, t2) <== Switcher()(LessThan(5)([out2calc, compare2]), out2calc, compare2);
 
   signal out3calc <== out2;
+  signal type2cal <== type2num;
+  signal compare3 <-- type2cal * 2;
+  type2cal * 2 === compare3;
   signal out3, t3;
-  (out3, t3) <== Switcher()(LessThan(5)([out3calc, type2num]), out3calc, type2num);
+  (out3, t3) <== Switcher()(LessThan(5)([out3calc, compare3]), out3calc, compare3);
 
   rate <== out3;
 
