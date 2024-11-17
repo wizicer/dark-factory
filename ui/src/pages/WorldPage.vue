@@ -173,8 +173,8 @@ const contract =
   chainId == 31337n
     ? (process.env.GAME_CONTRACT ?? '')
     : chainId == 544351n // Scroll Sepolia
-      ? ''
-      : '';
+      ? (process.env.GAME_CONTRACT ?? '')
+      : (process.env.GAME_CONTRACT ?? '');
 
 const g = GameAbi__factory.connect(contract, signer);
 
