@@ -196,14 +196,14 @@ template LayoutEligibility(MAP_WIDTH, MAP_HEIGHT, MAX_HOUSE, MAX_HOUSE_WIDTH, MA
   signal compare2 <-- type1calc * 2;
   type1calc * 2 === compare2;
   signal out2, t2;
-  (out2, t2) <== Switcher()(LessThan(5)([out2calc, compare2]), out2calc, compare2);
+  (out2, t2) <== Switcher()(LessThan(5)([compare2, out2calc]), out2calc, compare2);
 
   signal out3calc <== out2;
   signal type2cal <== type2num;
   signal compare3 <-- type2cal * 2;
   type2cal * 2 === compare3;
   signal out3, t3;
-  (out3, t3) <== Switcher()(LessThan(5)([out3calc, compare3]), out3calc, compare3);
+  (out3, t3) <== Switcher()(LessThan(5)([compare3, out3calc]), out3calc, compare3);
 
   rate <== out3;
 
